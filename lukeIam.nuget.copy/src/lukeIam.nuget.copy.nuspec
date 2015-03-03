@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>lukeIam.nuget.copy</id>
+        <version>1.0.0</version>
+        <title>Copy files before build</title>
+        <authors>lukeIam</authors>
+        <owners>lukeIam</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Copies files and folders to $(TargetDir) before every build depending on the target platform.
+
+x86 folder is copied when $(Platform)==x86
+x64  folder is copied when $(Platform)==x64
+'Any CPU' folder is copied when $(Platform)=='Any CPU'
+All folder is copied always</description>
+        <copyright />
+    </metadata>
+</package>
