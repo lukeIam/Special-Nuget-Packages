@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ZipAdress>http://d.7-zip.org/a/7za920.zip</ZipAdress>
+        <TargetFolder>$(TargetDir)</TargetFolder>
+        <FilesToCheck>7za.exe;7-zip.chm;license.txt;readme.txt</FilesToCheck>
+    </PropertyGroup>
+
+  
+     <UsingTask TaskName="CheckAllFilesExits" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+        <ParameterGroup>
+            <Files ParameterType="System.String" Required="true"/>
+            <TargetFolder ParameterType="System.String" Required="true" />
+            <Result ParameterType="System.Boolean" Output="true" />
+        </ParameterGroup>
+        <Task>
+            <Reference Include="System" />
+            <Reference Include="System.IO" />
+            <Using Namespace="System" />
+            <Using Namespace="System.IO" />
+            <Code Type="Fragment" Language="cs">
+            <![CDATA[
+              Result = true;
+              foreach(string file in Files.Split(';'))
+              {                
+                if(!File.Exists(TargetFolder+file))
+                {
+                  Result = false;
+                  break;
+                }
+              }
+            ]]>
+            </Code>
+        </Task>
+    </UsingTask>
+  
+    <UsingTask TaskName="DownloadAndExtractFile" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+        <ParameterGroup>
+            <Address ParameterType="System.String" Required="true"/>
+            <TargetFolder ParameterType="System.String" Required="true" />
+        </ParameterGroup>
+        <Task>
+            <Reference Include="System" />
+            <Reference Include="System.Net" />           
+            <Reference Include="System.IO" />
+            <Reference Include="System.IO.Compression" />
+            <Reference Include="System.IO.Compression.FileSystem" />
+            <Using Namespace="System" />
+            <Using Namespace="System.IO" />
+            <Using Namespace="System.IO.Compression" />
+            <Using Namespace="System.Net" />
+            <Code Type="Fragment" Language="cs">
+            <![CDATA[      
+                using (ZipArchive archive = new ZipArchive(new MemoryStream(new WebClient().DownloadData(Address)), ZipArchiveMode.Read))
+                {     
+                    foreach (ZipArchiveEntry file in archive.Entries)
+                    {
+                        string fileName = Path.Combine(TargetFolder, file.FullName);
+                        if (file.Name == "")
+                        {
+                            Directory.CreateDirectory(Path.GetDirectoryName(fileName));                            
+                        }
+                        else
+                        {
+                            file.ExtractToFile(fileName, true);
+                        }
+                    }
+                } 
+            ]]>
+            </Code>
+        </Task>
+    </UsingTask>
+    
+    <Target Name="BeforeBuild">
+        <Message Text="File exists check started" Importance="normal"/>
+        <CheckAllFilesExits Files='$(FilesToCheck)' TargetFolder='$(TargetFolder)'>
+          <Output PropertyName="AllFilesExists" TaskParameter="Result" />
+        </CheckAllFilesExits>
+      
+        <Message Text="All files allready exists -> exit" Importance="normal" Condition="$(AllFilesExists)" />
+        <Message Text="Some files were missing - download started:" Importance="normal" Condition="!$(AllFilesExists)"/>
+        <Message Text='$(ZipAdress)' Importance="normal" Condition="!$(AllFilesExists)"/>
+        <DownloadAndExtractFile Address='$(ZipAdress)' TargetFolder='$(TargetFolder)' Condition="!$(AllFilesExists)"/>
+        <Message Text="Download finished" Importance="normal" Condition="!$(AllFilesExists)"/>
+    </Target>
+</Project>
