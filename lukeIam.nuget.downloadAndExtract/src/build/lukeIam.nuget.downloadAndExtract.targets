@@ -9,7 +9,7 @@
     <UsingTask TaskName="lukeIam.msbuild.tasks.FilesExists.FilesExistsTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\lukeIam.msbuild.tasks.FileExists.dll" /> 
     <UsingTask TaskName="lukeIam.msbuild.tasks.ZipDownload.ZipDownloadTask"  AssemblyFile="$(MSBuildThisFileDirectory)..\tools\lukeIam.msbuild.tasks.ZipDownload.dll" />
     
-    <Target Name="BeforeBuild">
+    <Target Name="BeforeBuild$(MSBuildThisFileName)" BeforeTargets="BeforeBuild">
         <Message Text="File exists check started" Importance="normal"/>
         <FilesExistsTask Files='$(FilesToCheck)' Folder='$(TargetFolder)'>
           <Output PropertyName="AllFilesExists" TaskParameter="Result" />
