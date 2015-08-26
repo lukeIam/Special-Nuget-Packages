@@ -3,7 +3,7 @@ using System.IO;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
-namespace lukeIam.nuget.tasks.FilesExists
+namespace lukeIam.msbuild.tasks.FilesExists
 {
     public class FilesExistsTask: Task
     {
