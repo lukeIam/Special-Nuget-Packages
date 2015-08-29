@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <PropertyGroup>
-        <ZipAdress>http://d.7-zip.org/a/7za920.zip</ZipAdress>
-        <TargetFolder>$(TargetDir)</TargetFolder>
-        <FilesToCheck>7za.exe;7-zip.chm;license.txt;readme.txt</FilesToCheck>
-    </PropertyGroup>
-
     <UsingTask TaskName="lukeIam.msbuild.tasks.FilesExists.FilesExistsTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\lukeIam.msbuild.tasks.FileExists.dll" /> 
     <UsingTask TaskName="lukeIam.msbuild.tasks.ZipDownload.ZipDownloadTask"  AssemblyFile="$(MSBuildThisFileDirectory)..\tools\lukeIam.msbuild.tasks.ZipDownload.dll" />
     
     <Target Name="BeforeBuild$(MSBuildThisFileName)" BeforeTargets="BeforeBuild">
+        <PropertyGroup>
+            <ZipAdress>http://d.7-zip.org/a/7za920.zip</ZipAdress>
+            <TargetFolder>$(TargetDir)</TargetFolder>
+            <FilesToCheck>7za.exe;7-zip.chm;license.txt;readme.txt</FilesToCheck>
+        </PropertyGroup>
+    
         <Message Text="File exists check started" Importance="normal"/>
         <FilesExistsTask Files='$(FilesToCheck)' Folder='$(TargetFolder)'>
           <Output PropertyName="AllFilesExists" TaskParameter="Result" />
