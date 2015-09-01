@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>lukeIam.msbuild.tasks.ZipDownload</RootNamespace>
     <AssemblyName>lukeIam.msbuild.tasks.ZipDownload</AssemblyName>
-    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>337ec8c0</NuGetPackageImportStamp>
@@ -37,7 +37,7 @@
       <HintPath>..\packages\DotNetZip.1.9.5\lib\net20\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Build.Framework" />
-    <Reference Include="Microsoft.Build.Utilities" />
+    <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="System" />
     <Reference Include="System.Xml" />
   </ItemGroup>
