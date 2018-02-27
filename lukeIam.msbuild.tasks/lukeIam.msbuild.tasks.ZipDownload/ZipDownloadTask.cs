@@ -2,6 +2,7 @@
 using System.IO;
 using System.IO.Compression;
 using System.Net;
+using System.Security.Authentication;
 using Ionic.Zip;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -9,6 +10,9 @@ namespace lukeIam.msbuild.tasks.ZipDownload
 {
     public class ZipDownloadTask : Task
     {
+        private const SslProtocols _Tls12 = (SslProtocols)0x00000C00;
+        private const SecurityProtocolType Tls12 = (SecurityProtocolType)_Tls12;
+
         [Required]
         public string Address { get; set; }
 
@@ -27,6 +31,8 @@ namespace lukeIam.msbuild.tasks.ZipDownload
             {
                 Directory.CreateDirectory(TargetFolder);
             }
+
+            System.Net.ServicePointManager.SecurityProtocol = Tls12;
 
             using (WebClient wc = new WebClient())
             {
